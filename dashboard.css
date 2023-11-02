@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1px;
+    text-align: center;
+}
+
+.dashboard-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.weather-widget,
+.stock-widget {
+    background-color: #FFF;
+    border: 1px solid #403c78;
+    padding: 20px;
+    width: 45%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+h1 {
+    font-size: 30px;
+}

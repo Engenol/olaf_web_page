@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLAF_ENGENES</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>Information Provided by Engenes Software</h1>
+    </header>
+    <div class="dashboard-container">
+        <div class="weather-widget">
+            <head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Prices</title>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Electricity Prices</h1>
+
+    <!-- Dropdown selector for regions -->
+    <label for="regionSelector">Select Region: </label>
+    <select id="regionSelector">
+        <option value="NO1">NO1</option>
+        <option value="NO2">NO2</option>
+        <option value="NO3">NO3</option>
+        <option value="NO4">NO4</option>
+        <option value="NO5">NO5</option>
+    </select>
+
+    <div id="api-url-container">
+        <!-- The constructed API URL will be displayed here -->
+    </div>
+
+    <div id="price-chart-container">
+        <!-- Chart will be displayed here -->
+        <canvas id="price-chart"></canvas>
+    </div>
+
+    <script>
+        let chart = null; // Store the chart instance
+
+        // Function to fetch data and display NOK_per_kWh values in a chart
+        async function fetchAndDisplayChart() {
+            try {
+                // Get the current year, month, and day
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear();
+                const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                const currentDay = currentDate.getDate().toString().padStart(2, '0');
+
+                // Get the selected region from the dropdown
+                const selectedRegion = document.getElementById('regionSelector').value;
+
+                // Construct the API URL with the current year, current month, current day, and selected region
+                const apiUrl = `https://www.hvakosterstrommen.no/api/v1/prices/${currentYear}/${currentMonth}-${currentDay}_${selectedRegion}.json`;
+
+                // Display the constructed API URL as text
+                const apiUrlContainer = document.getElementById('api-url-container');
+                apiUrlContainer.textContent = `API URL: ${apiUrl}`;
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                // Extract NOK_per_kWh values and multiply them by 1.25
+                const nokPerKWhValues = data.map(item => item.NOK_per_kWh * 1.25);
+
+                // Clear the previous chart instance if it exists
+                if (chart !== null) {
+                    chart.destroy();
+                }
+
+                // Create a new chart
+                const ctx = document.getElementById('price-chart').getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Array.from({ length: nokPerKWhValues.length }, (_, i) => i + 0), // Labels as 1, 2, 3, ...
+                        datasets: [{
+                            label: 'NOK_per_kWh',
+                            data: nokPerKWhValues,
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)', // Bar color
+                            borderColor: 'rgba(75, 192, 192, 1)', // Border color
+                            borderWidth: 1, // Border width
+                        }],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Call the fetchAndDisplayChart function when the page loads
+        fetchAndDisplayChart();
+
+        // Add an event listener to the dropdown for immediate updates
+        document.getElementById('regionSelector').addEventListener('change', fetchAndDisplayChart);
+    </script>
+</body>
+</html>
+        </div>
+        <div class="stock-widget">
+            <h2>Stock Exchange</h2>
+            <div id="stock-data"></div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+
