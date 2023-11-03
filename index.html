@@ -35,6 +35,10 @@
         <option value="NO5">NO5</option>
     </select>
 
+    <div id="api-url-container">
+        <!-- The constructed API URL will be displayed here -->
+    </div>
+
     <div id="price-chart-container">
         <!-- Chart will be displayed here -->
         <canvas id="price-chart"></canvas>
@@ -58,7 +62,9 @@
                 // Construct the API URL with the current year, current month, current day, and selected region
                 const apiUrl = `https://www.hvakosterstrommen.no/api/v1/prices/${currentYear}/${currentMonth}-${currentDay}_${selectedRegion}.json`;
 
-
+                // Display the constructed API URL as text
+                const apiUrlContainer = document.getElementById('api-url-container');
+                apiUrlContainer.textContent = `API URL: ${apiUrl}`;
 
                 const response = await fetch(apiUrl);
                 const data = await response.json();
@@ -115,4 +121,6 @@
 
     <script src="dashboard.js"></script>
 </body>
+
+
 
